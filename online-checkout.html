@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Checkout | Finex Beauty Bloom</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-online.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-SxwBHyWfI2h4Py-b"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff0f3; }
+        .input-field { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; outline: none; transition: 0.3s; background: white; font-size: 14px; }
+        .input-field:focus { border-color: #ff85a2; box-shadow: 0 0 0 2px #ffe5ec; }
+        .payment-box { transition: all 0.2s ease; border: 2px solid #f8fafc; cursor: pointer; }
+        .payment-box.active { border-color: #f72585; background: #fff0f3; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-[#fff0f3] pb-10">
+
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40 p-4 border-b border-pink-100">
+        <div class="max-w-2xl mx-auto flex items-center gap-4">
+            <a href="online-shop.html" class="text-pink-500 text-xl"><i class="fas fa-arrow-left"></i></a>
+            <h1 class="text-xl font-bold text-slate-800 tracking-tight">Checkout Pesanan 🌸</h1>
+        </div>
+    </header>
+
+   <main class="max-w-2xl mx-auto px-4 mt-6">
+        <div class="bg-white p-6 rounded-[30px] shadow-sm mb-6 border border-pink-50">
+            <h3 class="font-bold text-slate-800 mb-4 border-b pb-2 flex items-center gap-2">
+                <i class="fas fa-shopping-bag text-pink-400"></i> Produk Dipesan
+            </h3>
+            <div id="checkout-list" class="space-y-4 text-sm"></div>
+            
+            <div class="mt-6 pt-4 border-t border-dashed border-slate-200">
+                <div class="flex justify-between items-center mb-1 text-sm">
+                    <span class="text-slate-400 font-bold">SUBTOTAL</span>
+                    <span id="txt-subtotal" class="text-slate-600 font-bold">Rp 0</span>
+                </div>
+                <div class="flex justify-between items-center mb-1 text-sm">
+                    <span class="text-slate-400 font-bold">ONGKOS KIRIM</span>
+                    <span class="text-green-500 font-black italic">GRATIS ✨</span>
+                </div>
+                <div id="row-asuransi" class="flex justify-between items-center mb-1 text-sm hidden">
+                    <span class="text-blue-500 font-bold">ASURANSI KEAMANAN</span>
+                    <span id="txt-asuransi" class="text-blue-600 font-bold">+ Rp 35.000</span>
+                </div>
+
+                <div id="row-diskon-khusus" class="flex justify-between items-center mb-1 hidden text-sm">
+                    <span class="text-pink-600 font-black italic">Reward Member</span>
+                    <span id="txt-diskon-member" class="text-pink-600 font-black">- Rp 0</span>
+                </div>
+
+                <div id="row-diskon-saldo" class="flex justify-between items-center mb-3 hidden text-sm">
+                    <span class="text-green-600 font-black italic">Promo Bayar Saldo</span>
+                    <span id="txt-diskon-saldo" class="text-green-600 font-black">- Rp 0</span>
+                </div>
+
+                <div class="flex justify-between items-end border-t border-slate-50 pt-3">
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Akhir</p>
+                        <h2 id="txt-total" class="text-2xl font-black text-[#f72585]">Rp 0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-[30px] shadow-sm border border-pink-50 mb-6">
+            <h3 class="font-bold text-slate-800 mb-4 border-b pb-2 flex items-center gap-2">
+                <i class="fas fa-truck text-pink-400"></i> Informasi Pengiriman
+            </h3>
+            <div class="space-y-4">
+                <input type="text" id="cust-name" class="input-field" placeholder="Nama Penerima">
+                <input type="number" id="cust-phone" class="input-field" placeholder="No. WhatsApp (628...)">
+                <div class="relative">
+                    <input type="text" id="destination-search" onkeyup="searchArea(this.value)" class="input-field" placeholder="Ketik Kecamatan Tujuan..." autocomplete="off">
+                    <div id="area-results" class="absolute z-50 w-full bg-white shadow-xl rounded-2xl mt-1 max-h-48 overflow-y-auto hidden text-xs border border-slate-100 no-scrollbar"></div>
+                    <input type="hidden" id="destination-id">
+                </div>
+                <textarea id="cust-address" rows="3" class="input-field" placeholder="Alamat Lengkap"></textarea>
+
+                <button type="button" onclick="applyFreeShipping()" id="btn-cek-ongkir" class="w-full py-4 bg-pink-500 text-white rounded-2xl text-xs font-bold uppercase tracking-widest active:scale-95 transition-all shadow-md">
+                    Konfirmasi Lokasi 🎁
+                </button>
+
+                <div id="asuransi-container" class="hidden">
+                    <div class="p-4 rounded-2xl border-2 border-blue-100 bg-blue-50/50 mt-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="font-bold text-slate-700 text-sm flex items-center gap-2">
+                                <i class="fas fa-shield-halved text-blue-500"></i> Proteksi Kerusakan
+                            </label>
+                            <input type="checkbox" id="check-asuransi" onchange="toggleAsuransi(this.checked)" class="w-5 h-5 accent-blue-600">
+                        </div>
+                        <p class="text-[10px] text-slate-500 leading-relaxed">Aktifkan perlindungan senilai <b>Rp 35.000</b>. Wajib Video Unboxing.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-[30px] shadow-sm border border-pink-50 mb-6">
+            <h3 class="font-bold text-slate-800 mb-4 border-b pb-2 flex items-center gap-2">
+                <i class="fas fa-credit-card text-pink-400"></i> Pilih Pembayaran
+            </h3>
+            <div class="space-y-3">
+                <div onclick="selectPayment('saldo')" id="pay-saldo" class="payment-box p-4 rounded-2xl border-2 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-green-50 text-green-500 rounded-full flex items-center justify-center"><i class="fas fa-wallet"></i></div>
+                        <div>
+                            <p class="font-bold text-slate-700 text-sm">Saldo Akun</p>
+                            <p id="txt-saldo-display" class="text-[10px] text-slate-400 font-bold">Memuat...</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-circle-check check-icon text-slate-100"></i>
+                </div>
+                <div onclick="selectPayment('va')" id="pay-va" class="payment-box p-4 rounded-2xl border-2 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center"><i class="fas fa-bolt"></i></div>
+                        <div><p class="font-bold text-slate-700 text-sm">Virtual Account (VA)</p></div>
+                    </div>
+                    <i class="fas fa-circle-check check-icon text-slate-100"></i>
+                </div>
+                <div onclick="selectPayment('manual')" id="pay-manual" class="payment-box p-4 rounded-2xl border-2 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-pink-50 text-pink-500 rounded-full flex items-center justify-center"><i class="fas fa-university"></i></div>
+                        <div><p class="font-bold text-slate-700 text-sm">Transfer Manual (WA)</p></div>
+                    </div>
+                    <i class="fas fa-circle-check check-icon text-slate-100"></i>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" id="selected-method" value="">
+
+        <button onclick="processOrder()" id="btn-order" class="w-full bg-slate-400 text-white py-5 rounded-[22px] font-black text-lg shadow-lg active:scale-95 transition-all mb-4 uppercase">
+            PILIH METODE BAYAR ✨
+        </button>
+    </main>
+
+<script>
+    const BITES_API_KEY = "biteship_test.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoid2Vic2l0ZSBiZWF1dHlibG9vbSIsInVzZXJJZCI6IjY5YjUzYTFjZmExYTg5MmM2Y2MxOTYzNyIsImlhdCI6MTc3NDA5OTE2MX0.8qtA1PLSPqyJFSJ2KDjT-GgKjlMta_aaLQwgLtvst3w"; 
+    
+    let cartData = JSON.parse(localStorage.getItem('finexcart')) || [];
+    let subtotalFinal = 0;
+    let shippingCost = 0; 
+    let insuranceCost = 0; 
+    let diskonLoyalty = 0;
+    let diskonSaldoPersen = 0; // Tambahkan ini
+    let diskonSaldoNominal = 0; // Tambahkan ini
+    let userData = null;
+
+    window.onload = async () => { 
+        await loadCustomerData(); 
+        renderCheckout(); 
+    };
+
+    async function loadCustomerData() {
+        const { data: { user } } = await db.auth.getUser();
+        if (user) {
+            const { data: profile } = await db.from('customers').select('*').eq('id', user.id).maybeSingle();
+            if (profile) {
+                userData = profile;
+                document.getElementById('cust-name').value = profile.full_name || "";
+                document.getElementById('cust-phone').value = profile.phone_number || "";
+                document.getElementById('cust-address').value = profile.address_shipping || "";
+                document.getElementById('txt-saldo-display').innerText = "Rp " + (profile.saldo || 0).toLocaleString();
+                
+                // Ambil setting diskon dan loyalty
+                await checkLoyaltyAndPromo(user.id);
+            }
+        }
+    }
+
+    async function checkLoyaltyAndPromo(userId) {
+        try {
+            const { data: settings } = await db.from('app_settings').select('*');
+            if (!settings) return;
+            
+            const rules = {};
+            settings.forEach(s => { 
+                if(s.value_int) rules[s.key_name] = s.value_int;
+                // Ambil persen diskon saldo dari value_text
+                if(s.key_name === 'discount_wallet_percent') {
+                    diskonSaldoPersen = parseFloat(s.value_text || 0);
+                }
+            });
+
+            const targetCount = rules.loyalty_target_count || 3;
+            const minNominal = rules.loyalty_min_nominal || 0;
+            const discountAmount = rules.loyalty_discount_amount || 0;
+
+            const { data: profile } = await db.from('customers').select('total_order_count').eq('id', userId).single();
+            const totalLunas = profile ? (profile.total_order_count || 0) : 0;
+
+            const { data: ongoingOrders } = await db.from('transaksi_online')
+                .select('id').eq('customer_id', userId)
+                .in('status_order', ['Pending', 'PROSES', 'Dikemas', 'Dikirim']);
+
+            const hasOngoing = ongoingOrders && ongoingOrders.length > 0;
+            let currentSubtotal = cartData.reduce((sum, i) => sum + (i.qty * i.harga), 0);
+
+            // LOGIKA LOYALTY
+            if (totalLunas > 0 && totalLunas % targetCount === 0 && !hasOngoing && currentSubtotal >= minNominal) {
+                diskonLoyalty = Number(discountAmount); 
+                document.getElementById('row-diskon-khusus').classList.remove('hidden');
+                document.getElementById('txt-diskon-member').innerText = "- Rp " + diskonLoyalty.toLocaleString();
+            } else {
+                diskonLoyalty = 0;
+                document.getElementById('row-diskon-khusus').classList.add('hidden');
+            }
+            
+            updateTotalDisplay();
+        } catch (err) { console.error("Setting Error:", err); }
+    }
+
+    function renderCheckout() {
+        if (cartData.length === 0) return window.location.href = "online-shop.html";
+        const container = document.getElementById('checkout-list');
+        subtotalFinal = 0;
+        container.innerHTML = cartData.map(item => {
+            const sub = item.qty * item.harga;
+            subtotalFinal += sub;
+            return `<div class="flex justify-between items-start mb-2"><div><p class="font-bold text-slate-700 uppercase text-[12px]">${item.nama || item.nama_barang}</p><p class="text-[11px] text-slate-400 font-bold">${item.qty} x Rp ${item.harga.toLocaleString()}</p></div><p class="font-bold text-slate-800 text-[12px]">Rp ${sub.toLocaleString()}</p></div>`;
+        }).join('');
+        updateTotalDisplay();
+    }
+
+    function selectPayment(method) {
+        // Reset diskon saldo nominal setiap kali ganti metode
+        diskonSaldoNominal = 0;
+        document.getElementById('row-diskon-saldo').classList.add('hidden');
+
+        // Hitung total sementara tanpa diskon saldo
+        let tempTotal = subtotalFinal + shippingCost + insuranceCost - diskonLoyalty;
+
+        if (method === 'saldo') {
+            if (userData.saldo < tempTotal) return alert("Saldo tidak cukup cantik! 🌸 Silahkan top-up dulu.");
+            
+            // Hitung diskon saldo jika ada
+            if (diskonSaldoPersen > 0) {
+                diskonSaldoNominal = Math.floor(subtotalFinal * (diskonSaldoPersen / 100));
+                document.getElementById('row-diskon-saldo').classList.remove('hidden');
+                document.getElementById('txt-diskon-saldo').innerText = "- Rp " + diskonSaldoNominal.toLocaleString();
+            }
+        }
+        
+        document.getElementById('selected-method').value = method;
+        document.querySelectorAll('.payment-box').forEach(el => el.classList.remove('active', 'border-[#f72585]'));
+        document.getElementById('pay-' + method).classList.add('active', 'border-[#f72585]');
+        
+        const btn = document.getElementById('btn-order');
+        btn.className = "w-full bg-gradient-to-r from-[#ff85a2] to-[#f72585] text-white py-5 rounded-[22px] font-black text-lg shadow-lg active:scale-95 transition-all mb-4";
+        
+        if(method === 'saldo') btn.innerText = "BAYAR PAKAI SALDO ✨";
+        else if(method === 'va') btn.innerText = "BAYAR VIRTUAL ACCOUNT ⚡";
+        else btn.innerText = "PESAN & KONFIRMASI WA 📱";
+
+        updateTotalDisplay();
+    }
+
+    async function processOrder() {
+        const method = document.getElementById('selected-method').value;
+        if (!method) return alert("Pilih metode pembayaran dulu ya! 🌸");
+        
+        const name = document.getElementById('cust-name').value;
+        const phone = document.getElementById('cust-phone').value;
+        const address = document.getElementById('cust-address').value;
+        const totalBayar = subtotalFinal + shippingCost + insuranceCost - diskonLoyalty - diskonSaldoNominal;
+
+        if (!name || !address || !document.getElementById('destination-id').value) return alert("Lengkapi data pengiriman!");
+
+        const btn = document.getElementById('btn-order');
+        btn.innerText = "Memproses..."; btn.disabled = true;
+
+        try {
+            const inv = `BLM-${Date.now().toString().slice(-6)}`;
+            let statusOrder = (method === 'saldo' ? 'Dikemas' : 'Pending');
+
+            // POTONG SALDO JIKA METODE SALDO
+            if (method === 'saldo') {
+                const { error: errUpdateSaldo } = await db.from('customers').update({ saldo: userData.saldo - totalBayar }).eq('id', userData.id);
+                if (errUpdateSaldo) throw new Error("Gagal memproses saldo.");
+                await db.from('topup_history').insert([{ no_invoice: inv, customer_id: userData.id, nominal: totalBayar, status: 'PEMBAYARAN' }]);
+            }
+
+            const asuransiText = insuranceCost > 0 ? "AKTIF (Rp 35.000)" : "Tidak Aktif";
+
+            // SIMPAN TRANSAKSI
+            const { data: trx, error: errTrx } = await db.from('transaksi_online').insert([{
+                no_invoice: inv, 
+                customer_id: userData.id, 
+                nama_penerima: name, 
+                wa_penerima: phone,
+                alamat_kirim: address, 
+                kurir: "Manual (Free Ongkir)", 
+                metode_bayar: method.toUpperCase(),
+                diskon: (diskonLoyalty + diskonSaldoNominal), 
+                status_order: statusOrder,
+                grand_total: totalBayar, 
+                catatan: `Asuransi: ${asuransiText}. Promo: Saldo ${diskonSaldoPersen}%`
+            }]).select().single();
+
+            if (errTrx) throw errTrx;
+
+            const details = cartData.map(item => ({ 
+                transaksi_id: trx.id, produk_id: item.id, nama_barang: item.nama || item.nama_barang, 
+                qty: item.qty, harga_satuan: item.harga, subtotal_item: item.qty * item.harga 
+            }));
+            await db.from('transaksi_online_detail').insert(details);
+
+            localStorage.removeItem('finexcart');
+            
+            if (method === 'saldo') {
+                alert("Pembayaran Berhasil! Pesananmu sedang kami siapkan. 🌸");
+                window.location.href = "online-shop.html";
+            } else if (method === 'va') {
+                const { data: midtrans } = await db.functions.invoke('smart-endpoint', { 
+                    body: { action: 'generate_token', order_id: inv, amount: totalBayar, customer_name: name, customer_email: userData.email } 
+                });
+                window.snap.pay(midtrans.token, { onSuccess: () => { window.location.href = "online-shop.html"; } });
+            } else {
+                const waMsg = `Halo Admin! Saya memesan *${inv}* (Manual). Total: Rp ${totalBayar.toLocaleString()}. Mohon info rekening transfernya ya 🌸`;
+                window.open(`https://wa.me/6281239739396?text=${encodeURIComponent(waMsg)}`, '_blank');
+                window.location.href = "online-shop.html";
+            }
+        } catch (e) { 
+            alert("Terjadi Kendala: " + e.message); 
+            btn.disabled = false; btn.innerText = "COBA LAGI ✨";
+        }
+    }
+
+    function updateTotalDisplay() {
+        const total = subtotalFinal + shippingCost + insuranceCost - diskonLoyalty - diskonSaldoNominal;
+        document.getElementById('txt-subtotal').innerText = "Rp " + subtotalFinal.toLocaleString();
+        document.getElementById('txt-total').innerText = "Rp " + (total < 0 ? 0 : total).toLocaleString();
+    }
+
+    async function searchArea(query) {
+        const box = document.getElementById('area-results');
+        if (query.length < 3) return box.classList.add('hidden');
+        try {
+            const res = await fetch(`https://api.biteship.com/v1/maps/areas?countries=ID&input=${query}`, { 
+                headers: { 'Authorization': BITES_API_KEY.trim() } 
+            });
+            const data = await res.json();
+            if (data.areas && data.areas.length > 0) {
+                box.innerHTML = data.areas.map(a => `
+                    <div onclick="selectArea('${a.id}', '${a.name}')" class="p-4 hover:bg-pink-50 cursor-pointer border-b border-slate-50 font-bold text-slate-600 text-[11px]">
+                        <i class="fas fa-map-marker-alt text-pink-400 mr-2"></i> ${a.name} <br>
+                        <span class="text-[9px] text-slate-400 ml-6">${a.current_name}</span>
+                    </div>
+                `).join('');
+                box.classList.remove('hidden');
+            }
+        } catch (e) { console.error("Search error:", e); }
+    }
+
+    function selectArea(id, name) {
+        document.getElementById('destination-id').value = id; 
+        document.getElementById('destination-search').value = name;
+        document.getElementById('area-results').classList.add('hidden');
+    }
+
+    function applyFreeShipping() {
+        const destId = document.getElementById('destination-id').value;
+        if (!destId) return alert("Pilih kecamatan tujuan dulu ya! 🌸");
+        shippingCost = 0;
+        document.getElementById('asuransi-container').classList.remove('hidden');
+        document.getElementById('btn-cek-ongkir').innerHTML = '<i class="fas fa-check-circle"></i> Lokasi Terpilih & Free Ongkir';
+        document.getElementById('btn-cek-ongkir').classList.replace('bg-pink-500', 'bg-green-500');
+        updateTotalDisplay();
+    }
+
+    function toggleAsuransi(isActive) {
+        insuranceCost = isActive ? 35000 : 0;
+        const rowAsuransi = document.getElementById('row-asuransi');
+        if (isActive) rowAsuransi.classList.remove('hidden');
+        else rowAsuransi.classList.add('hidden');
+        updateTotalDisplay();
+    }
+</script>
+</body>
+</html>
