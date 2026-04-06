@@ -3,17 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Beauty Bloom | Official Store 🌸</title>
+    
+    <title>Beauty Bloom Fashion | Koleksi Import Premium & Terkini 🌸</title>
+    <meta name="description" content="Destinasi utama koleksi fashion impor eksklusif. Beauty Bloom Fashion menghadirkan tren global dengan kualitas premium dan gaya timeless.">
+    <meta name="author" content="Finex POS System">
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-online.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fff0f3; margin: 0; scroll-behavior: smooth; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(247, 37, 133, 0.1); }
         
+        /* Slider Setup */
         .slider-container { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 35px; }
         .slide-item { position: absolute; inset: 0; opacity: 0; transition: opacity 0.8s ease-in-out; display: none; }
         .slide-item.active { opacity: 1; display: block; }
@@ -23,7 +29,7 @@
         .dot-ad.active { background: white; width: 20px; border-radius: 10px; }
 
         .product-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .product-card:hover { transform: translateY(-5px); }
+        .product-card:hover { transform: translateY(-8px); shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
         
         footer { background: #fff; border-top-left-radius: 40px; border-top-right-radius: 40px; }
     </style>
@@ -32,7 +38,7 @@
 
     <nav class="glass-nav sticky top-0 z-50 px-4 py-3 flex items-center justify-between">
         <div class="flex items-center gap-4">
-            <h1 class="text-xl font-black text-[#f72585] tracking-tighter">BeautyBloom</h1>
+            <h1 class="text-xl font-black text-[#f72585] tracking-tighter uppercase">BeautyBloom</h1>
         </div>
         <div class="flex items-center gap-3">
             <button onclick="window.location.href='login-customer.html'" class="text-[10px] font-black text-slate-600 px-4 py-2 rounded-full border border-slate-200">MASUK</button>
@@ -46,7 +52,7 @@
                 <div class="slide-item active flex items-center justify-center bg-gradient-to-br from-[#ff85a2] to-[#f72585] text-white">
                     <div class="text-center">
                         <i class="fas fa-circle-notch animate-spin text-3xl mb-2"></i>
-                        <p class="text-[10px] font-bold uppercase tracking-widest">Memuat Promo...</p>
+                        <p class="text-[10px] font-bold uppercase tracking-widest">Memuat Tren Global...</p>
                     </div>
                 </div>
             </div>
@@ -55,73 +61,75 @@
 
         <div class="flex flex-col gap-4">
             <div class="h-1/2 bg-sky-400 rounded-[30px] p-6 text-white relative overflow-hidden shadow-lg">
-                <h3 class="font-black text-lg leading-tight">Holiday <br> Sale! 🌴</h3>
-                <p class="text-[10px] opacity-80 mt-1 uppercase font-bold">Diskon s/d 60%</p>
+                <h3 class="font-black text-lg leading-tight uppercase">Quality <br> Choice 💎</h3>
+                <p class="text-[10px] opacity-80 mt-1 uppercase font-bold tracking-widest text-nowrap">Premium Imported Item</p>
                 <img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png" class="absolute -right-2 bottom-0 w-20 opacity-40">
             </div>
             <div class="h-1/2 bg-orange-400 rounded-[30px] p-6 text-white relative overflow-hidden shadow-lg">
-                <h3 class="font-black text-lg leading-tight">New <br> Arrivals 👗</h3>
-                <p class="text-[10px] opacity-80 mt-1 uppercase font-bold">Koleksi Terbaru</p>
+                <h3 class="font-black text-lg leading-tight uppercase">New <br> Arrivals 👗</h3>
+                <p class="text-[10px] opacity-80 mt-1 uppercase font-bold tracking-widest">Global Fashion</p>
                 <img src="https://cdn-icons-png.flaticon.com/512/3159/3159614.png" class="absolute -right-2 bottom-0 w-20 opacity-40">
             </div>
         </div>
     </section>
 
     <section class="max-w-6xl mx-auto px-4 mt-10">
-        <div class="flex justify-between items-end mb-6">
+        <div class="flex justify-between items-end mb-8">
             <div>
-                <h3 class="text-xl font-black text-slate-800 tracking-tight italic uppercase">Koleksi Pilihan 🌸</h3>
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Premium Imported Fashion</p>
+                <h3 class="text-xl font-black text-slate-800 tracking-tight italic uppercase">Exclusive Collection 🌸</h3>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Imported Fashion Curator</p>
             </div>
         </div>
 
-        <div id="productGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-20">
+        <div id="productGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-20">
             <div class="col-span-full text-center py-20 text-slate-400 text-[10px] font-black animate-pulse uppercase tracking-widest">
-                Sedang Menyiapkan Katalog... ✨
+                Menyiapkan Koleksi Terbaik... ✨
             </div>
         </div>
     </section>
 
     <footer class="p-8 pt-12 shadow-[0_-10px_40px_rgba(247,37,133,0.05)] text-slate-600 bg-white rounded-t-[40px]">
         <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
+            
             <div>
-                <h2 class="text-2xl font-black text-[#f72585] mb-4 tracking-tighter uppercase">BeautyBloom</h2>
-                <div class="space-y-3">
-                    <p class="text-[11px] leading-relaxed font-bold text-slate-700 uppercase tracking-wider">
-                        <i class="fas fa-plane-arrival mr-1 text-pink-400"></i> Premium Imported Collection
-                    </p>
+                <h2 class="text-2xl font-black text-[#f72585] mb-2 tracking-tighter uppercase">BeautyBloom</h2>
+                <p class="text-[10px] font-bold text-pink-400 uppercase tracking-[0.2em] mb-4 italic">The Art of Fashion</p>
+                <div class="space-y-4">
                     <p class="text-xs leading-relaxed font-medium text-slate-500 italic">
-                       "Beauty Bloom Fashion adalah destinasi utama bagi Anda yang mengutamakan kualitas dan eksklusivitas. Kami menghadirkan koleksi fashion impor pilihan yang memadukan tren global dengan sentuhan gaya yang timeless. Karena penampilan Anda adalah cerminan pesona yang autentik."
+                        "Beauty Bloom Fashion adalah destinasi utama bagi Anda yang mengutamakan kualitas dan eksklusivitas. Kami menghadirkan koleksi fashion impor pilihan yang memadukan tren global dengan sentuhan gaya yang timeless."
                     </p>
-                    <div class="flex items-center gap-2 py-2">
-                        <span class="text-[9px] bg-pink-100 text-[#f72585] px-2 py-1 rounded-md font-black uppercase">100% Authentic</span>
-                        <span class="text-[9px] bg-slate-100 text-slate-600 px-2 py-1 rounded-md font-black uppercase">High Quality</span>
+                    <div class="flex items-center gap-3 py-2">
+                        <div class="flex items-center gap-1.5">
+                            <i class="fas fa-check-circle text-[#f72585] text-[10px]"></i>
+                            <span class="text-[9px] text-slate-700 font-black uppercase tracking-tighter">Authentic</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i class="fas fa-check-circle text-[#f72585] text-[10px]"></i>
+                            <span class="text-[9px] text-slate-700 font-black uppercase tracking-tighter">Premium</span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="flex gap-4 mt-6">
-                    <a href="https://instagram.com/beautybloom" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-pink-500 hover:bg-[#f72585] hover:text-white transition-all shadow-sm">
+                    <a href="https://instagram.com/beautybloom" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-pink-500 hover:bg-[#f72585] hover:text-white transition-all shadow-sm">
                         <i class="fab fa-instagram text-lg"></i>
                     </a>
-                    <a href="https://tiktok.com/@beautybloom" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-800 hover:bg-black hover:text-white transition-all shadow-sm">
+                    <a href="https://tiktok.com/@beautybloom" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-800 hover:bg-black hover:text-white transition-all shadow-sm">
                         <i class="fab fa-tiktok text-lg"></i>
-                    </a>
-                    <a href="https://facebook.com/beautybloom" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm">
-                        <i class="fab fa-facebook-f text-lg"></i>
                     </a>
                 </div>
             </div>
 
             <div>
-                <h3 class="font-black text-slate-800 text-sm uppercase tracking-widest mb-6 border-b-2 border-pink-100 pb-2 w-fit">Butuh Bantuan?</h3>
+                <h3 class="font-black text-slate-800 text-sm uppercase tracking-widest mb-6 border-b-2 border-pink-100 pb-2 w-fit">Customer Care</h3>
                 <ul class="space-y-4">
                     <li>
-                        <a href="https://wa.me/628123456789?text=Halo%20Beauty%20Bloom,%20saya%20ingin%20bertanya%20produk.." target="_blank" class="flex items-center gap-3 group">
+                        <a href="https://wa.me/628123456789" class="flex items-center gap-3 group">
                             <div class="w-9 h-9 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-lg group-hover:bg-green-500 group-hover:text-white transition-all">
                                 <i class="fab fa-whatsapp"></i>
                             </div>
                             <div>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">WhatsApp CS</p>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">WhatsApp Chat</p>
                                 <p class="text-sm font-black text-slate-700">0812-3456-789</p>
                             </div>
                         </a>
@@ -130,26 +138,26 @@
                         <div class="w-9 h-9 bg-pink-100 text-[#f72585] rounded-xl flex items-center justify-center text-lg"><i class="fas fa-envelope"></i></div>
                         <div>
                             <p class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">Email Support</p>
-                            <a href="mailto:hello@beautybloom.com" class="text-sm font-black text-slate-700 hover:text-pink-500">hello@beautybloom.com</a>
+                            <p class="text-sm font-black text-slate-700">hello@beautybloom.com</p>
                         </div>
                     </li>
                 </ul>
             </div>
 
-            <div class="bg-slate-50 p-6 rounded-[25px] border border-slate-100">
-                <h3 class="font-black text-slate-800 text-xs uppercase tracking-widest mb-4">Informasi Sistem</h3>
-                <div class="flex items-start gap-4">
-                    <div class="p-3 bg-white rounded-xl shadow-sm"><i class="fas fa-code text-[#f72585]"></i></div>
-                    <div>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">Developed By</p>
-                        <p class="text-xs font-black text-slate-800">Finex POS System</p>
-                        <p class="text-[9px] mt-2 leading-relaxed opacity-70">Manajemen retail terintegrasi untuk solusi bisnis digital Anda.</p>
+            <div class="bg-slate-50 p-6 rounded-[25px] border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <h3 class="font-black text-slate-800 text-xs uppercase tracking-widest mb-4">Informasi Sistem</h3>
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-white rounded-xl shadow-sm"><i class="fas fa-laptop-code text-[#f72585]"></i></div>
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">Developed By</p>
+                            <p class="text-xs font-black text-slate-800">Finex POS System</p>
+                        </div>
                     </div>
                 </div>
                 <p class="text-[9px] font-bold text-slate-400 mt-6 uppercase tracking-tighter">© 2026 BeautyBloom. All Rights Reserved.</p>
             </div>
         </div>
-        <div class="h-10"></div>
     </footer>
 
 <script>
@@ -166,7 +174,7 @@
         const { data: setting } = await db.from('app_settings').select('value_text, is_active').eq('key_name', 'dashboard_banners').single();
 
         if (!setting || !setting.is_active || !setting.value_text) {
-            slider.innerHTML = `<div class="slide-item active"><img src="https://via.placeholder.com/800x400?text=Beauty+Bloom+Promo"></div>`;
+            slider.innerHTML = `<div class="slide-item active"><img src="https://via.placeholder.com/800x400?text=Beauty+Bloom+Fashion"></div>`;
             return;
         }
 
@@ -202,11 +210,11 @@
                 <div class="w-full aspect-[4/5] bg-slate-50 rounded-[26px] mb-3 overflow-hidden relative">
                     <img src="${p.image_url || 'https://via.placeholder.com/300x400'}" class="w-full h-full object-cover">
                 </div>
-                <div class="flex-grow px-1">
+                <div class="flex-grow px-2">
                     <h4 class="font-bold text-slate-700 text-[11px] leading-tight uppercase mb-1 line-clamp-2">${p.nama_barang}</h4>
                 </div>
-                <button onclick="handleProductClick()" class="mt-4 w-full bg-slate-50 hover:bg-pink-100 text-pink-500 py-3 rounded-2xl text-[9px] font-black uppercase transition-all tracking-widest border border-pink-50">
-                    Beli Sekarang ✨
+                <button onclick="handleProductClick()" class="mt-4 w-full bg-slate-50 hover:bg-pink-500 hover:text-white py-3.5 rounded-2xl text-[9px] font-black uppercase transition-all tracking-widest border border-pink-50">
+                    Cek Detail Koleksi ✨
                 </button>
             </div>
         `).join('');
@@ -215,7 +223,7 @@
     async function handleProductClick() {
         const { data: { session } } = await db.auth.getSession();
         if (!session) {
-            alert("Hai cantik! Silahkan Login atau Daftar Akun terlebih dahulu untuk melihat detail produk dan memesan ya.. 🌸");
+            alert("Hai cantik! Silakan Login untuk melihat detail koleksi eksklusif kami. 🌸");
             window.location.href = "login-customer.html";
         } else {
             window.location.href = "online-shop.html"; 
