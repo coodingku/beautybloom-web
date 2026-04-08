@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>Beauty Bloom Fashion | Koleksi Import Premium & Terkini 🌸</title>
+    <meta name="description" content="Destinasi utama koleksi fashion impor eksklusif. Beauty Bloom Fashion menghadirkan tren global dengan kualitas premium dan gaya timeless.">
+    <meta name="author" content="Finex POS System">
     
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-online.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,8 +16,10 @@
     
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fff0f3; margin: 0; scroll-behavior: smooth; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
         .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(247, 37, 133, 0.1); }
         
+        /* Slider Setup */
         .slider-container { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 35px; }
         .slide-item { position: absolute; inset: 0; opacity: 0; transition: opacity 0.8s ease-in-out; display: none; }
         .slide-item.active { opacity: 1; display: block; }
@@ -26,33 +28,19 @@
         .dot-ad { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); transition: all 0.3s; }
         .dot-ad.active { background: white; width: 20px; border-radius: 10px; }
 
-        #popupAdModal { transition: opacity 0.4s ease-out; pointer-events: none; opacity: 0; display: none; }
-        #popupAdModal.flex { display: flex; }
-        #popupAdModal.show-modal { opacity: 1; pointer-events: auto; }
-        .modal-box { transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .show-modal .modal-box { transform: scale(1); }
+        .product-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .product-card:hover { transform: translateY(-8px); shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        
+        footer { background: #fff; border-top-left-radius: 40px; border-top-right-radius: 40px; }
     </style>
 </head>
-<body class="relative">
-
-    <div id="popupAdModal" class="fixed inset-0 z-[1000] items-center justify-center p-6">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePopup()"></div>
-        <div class="modal-box relative bg-white rounded-[40px] overflow-hidden max-w-sm w-full shadow-2xl">
-            <button onclick="closePopup()" class="absolute top-4 right-4 w-10 h-10 bg-black/20 hover:bg-black/40 text-white rounded-full flex items-center justify-center backdrop-blur-md z-10">
-                <i class="fas fa-times"></i>
-            </button>
-            <div id="popupContent" class="aspect-square bg-slate-100 flex items-center justify-center overflow-hidden"></div>
-            <div class="p-6 text-center">
-                <button onclick="closePopup()" class="w-full bg-[#f72585] text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-lg shadow-pink-200">
-                    Lihat Koleksi 🌸
-                </button>
-            </div>
-        </div>
-    </div>
+<body>
 
     <nav class="glass-nav sticky top-0 z-50 px-4 py-3 flex items-center justify-between">
-        <h1 class="text-xl font-black text-[#f72585] tracking-tighter uppercase">BeautyBloom</h1>
-        <div class="flex gap-3">
+        <div class="flex items-center gap-4">
+            <h1 class="text-xl font-black text-[#f72585] tracking-tighter uppercase">BeautyBloom</h1>
+        </div>
+        <div class="flex items-center gap-3">
             <button onclick="window.location.href='login-customer.html'" class="text-[10px] font-black text-slate-600 px-4 py-2 rounded-full border border-slate-200">MASUK</button>
             <button onclick="window.location.href='register-customer.html'" class="text-[10px] font-black bg-[#f72585] text-white px-5 py-2 rounded-full shadow-lg shadow-pink-200">DAFTAR</button>
         </div>
@@ -61,142 +49,172 @@
     <section class="p-4 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
         <div class="md:col-span-2 relative h-56 md:h-80 bg-slate-200 rounded-[35px] overflow-hidden shadow-xl shadow-pink-100">
             <div id="promo-slider" class="slider-container">
-                <div class="slide-item active flex items-center justify-center bg-gradient-to-br from-[#ff85a2] to-[#f72585] text-white text-[10px] font-bold uppercase">Memuat...</div>
+                <div class="slide-item active flex items-center justify-center bg-gradient-to-br from-[#ff85a2] to-[#f72585] text-white">
+                    <div class="text-center">
+                        <i class="fas fa-circle-notch animate-spin text-3xl mb-2"></i>
+                        <p class="text-[10px] font-bold uppercase tracking-widest">Memuat Tren Global...</p>
+                    </div>
+                </div>
             </div>
             <div id="promo-dots" class="absolute bottom-5 left-10 flex gap-2 z-20"></div>
         </div>
-        <div class="hidden md:flex flex-col gap-4">
-            <div class="h-1/2 bg-sky-400 rounded-[30px] p-6 text-white relative overflow-hidden">
-                <h3 class="font-black text-lg uppercase leading-tight">Quality <br> Choice 💎</h3>
+
+        <div class="flex flex-col gap-4">
+            <div class="h-1/2 bg-sky-400 rounded-[30px] p-6 text-white relative overflow-hidden shadow-lg">
+                <h3 class="font-black text-lg leading-tight uppercase">Quality <br> Choice 💎</h3>
+                <p class="text-[10px] opacity-80 mt-1 uppercase font-bold tracking-widest text-nowrap">Premium Imported Item</p>
+                <img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png" class="absolute -right-2 bottom-0 w-20 opacity-40">
             </div>
-            <div class="h-1/2 bg-orange-400 rounded-[30px] p-6 text-white relative overflow-hidden">
-                <h3 class="font-black text-lg uppercase leading-tight">New <br> Arrivals 👗</h3>
+            <div class="h-1/2 bg-orange-400 rounded-[30px] p-6 text-white relative overflow-hidden shadow-lg">
+                <h3 class="font-black text-lg leading-tight uppercase">New <br> Arrivals 👗</h3>
+                <p class="text-[10px] opacity-80 mt-1 uppercase font-bold tracking-widest">Global Fashion</p>
+                <img src="https://cdn-icons-png.flaticon.com/512/3159/3159614.png" class="absolute -right-2 bottom-0 w-20 opacity-40">
             </div>
         </div>
     </section>
 
     <section class="max-w-6xl mx-auto px-4 mt-10">
-        <h3 class="text-xl font-black text-slate-800 italic uppercase mb-8">Exclusive Collection 🌸</h3>
-        <div id="productGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-20"></div>
+        <div class="flex justify-between items-end mb-8">
+            <div>
+                <h3 class="text-xl font-black text-slate-800 tracking-tight italic uppercase">Exclusive Collection 🌸</h3>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Imported Fashion Curator</p>
+            </div>
+        </div>
+
+        <div id="productGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-20">
+            <div class="col-span-full text-center py-20 text-slate-400 text-[10px] font-black animate-pulse uppercase tracking-widest">
+                Menyiapkan Koleksi Terbaik... ✨
+            </div>
+        </div>
     </section>
 
-    <footer class="p-8 bg-white rounded-t-[40px] text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-        © 2026 BeautyBloom - Developed By Finex POS System
+    <footer class="p-8 pt-12 shadow-[0_-10px_40px_rgba(247,37,133,0.05)] text-slate-600 bg-white rounded-t-[40px]">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
+            
+            <div>
+                <h2 class="text-2xl font-black text-[#f72585] mb-2 tracking-tighter uppercase">BeautyBloom</h2>
+                <p class="text-[10px] font-bold text-pink-400 uppercase tracking-[0.2em] mb-4 italic">The Art of Fashion</p>
+                <div class="space-y-4">
+                    <p class="text-xs leading-relaxed font-medium text-slate-500 italic">
+                        "Beauty Bloom Fashion adalah destinasi utama bagi Anda yang mengutamakan kualitas dan eksklusivitas. Kami menghadirkan koleksi fashion impor pilihan yang memadukan tren global dengan sentuhan gaya yang timeless."
+                    </p>
+                    <div class="flex items-center gap-3 py-2">
+                        <div class="flex items-center gap-1.5">
+                            <i class="fas fa-check-circle text-[#f72585] text-[10px]"></i>
+                            <span class="text-[9px] text-slate-700 font-black uppercase tracking-tighter">Authentic</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i class="fas fa-check-circle text-[#f72585] text-[10px]"></i>
+                            <span class="text-[9px] text-slate-700 font-black uppercase tracking-tighter">Premium</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 mt-6">
+                    <a href="https://instagram.com/dbeautybloom_" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-pink-500 hover:bg-[#f72585] hover:text-white transition-all shadow-sm">
+                        <i class="fab fa-instagram text-lg"></i>
+                    </a>
+                    <a href="https://tiktok.com/@beautybloom_9" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-800 hover:bg-black hover:text-white transition-all shadow-sm">
+                        <i class="fab fa-tiktok text-lg"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-black text-slate-800 text-sm uppercase tracking-widest mb-6 border-b-2 border-pink-100 pb-2 w-fit">Customer Care</h3>
+                <ul class="space-y-4">
+                    <li>
+                        <a href="https://wa.me/6281805060499" class="flex items-center gap-3 group">
+                            <div class="w-9 h-9 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-lg group-hover:bg-green-500 group-hover:text-white transition-all">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">WhatsApp Chat</p>
+                                <p class="text-sm font-black text-slate-700">0818-0506-0499</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <div class="w-9 h-9 bg-pink-100 text-[#f72585] rounded-xl flex items-center justify-center text-lg"><i class="fas fa-envelope"></i></div>
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">Email Support</p>
+                            <p class="text-sm font-black text-slate-700">beautybloom64@gmail.com</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-slate-50 p-6 rounded-[25px] border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <h3 class="font-black text-slate-800 text-xs uppercase tracking-widest mb-4">Informasi Sistem</h3>
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-white rounded-xl shadow-sm"><i class="fas fa-laptop-code text-[#f72585]"></i></div>
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">Developed By</p>
+                            <p class="text-xs font-black text-slate-800">Finex POS System</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-[9px] font-bold text-slate-400 mt-6 uppercase tracking-tighter">© 2026 BeautyBloom. All Rights Reserved.</p>
+            </div>
+        </div>
     </footer>
 
 <script>
     let currentSlide = 0;
 
     window.onload = () => {
-        // Gunakan pengecekan keberadaan variabel db yang lebih ketat
-        const checkDB = setInterval(() => {
-            if (typeof db !== 'undefined') {
-                clearInterval(checkDB);
-                initApp();
-            }
-        }, 100);
-    };
-
-    function initApp() {
         fetchProducts();
         loadDynamicAds();
-        loadPopupAd();
-    }
-
-    // --- FUNGSI POPUP (DENGAN PENANGANAN ERROR 406) ---
-    async function loadPopupAd() {
-        try {
-            // Gunakan query langsung via fetch jika library bermasalah, 
-            // tapi kita coba dulu cara standar yang diperbaiki:
-            const { data: popup, error } = await db.from('app_settings')
-                .select('value_text, is_active')
-                .eq('key_name', 'popup_banner')
-                .maybeSingle(); // Menggunakan maybeSingle lebih aman daripada .single()
-
-            if (error) throw error;
-
-            if (popup && popup.is_active && popup.value_text) {
-                const modal = document.getElementById('popupAdModal');
-                const content = document.getElementById('popupContent');
-                content.innerHTML = `<img src="${popup.value_text}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='Gambar tidak ditemukan'">`;
-                
-                modal.classList.add('flex');
-                setTimeout(() => modal.classList.add('show-modal'), 50);
-            }
-        } catch (e) { 
-            console.warn("Popup info:", e.message); 
-        }
-    }
-
-    function closePopup() {
-        const modal = document.getElementById('popupAdModal');
-        modal.classList.remove('show-modal');
-        setTimeout(() => {
-            modal.classList.remove('flex');
-            document.body.style.overflow = ''; 
-        }, 300);
-    }
+    };
 
     async function loadDynamicAds() {
+        const slider = document.getElementById('promo-slider');
+        const dotsContainer = document.getElementById('promo-dots');
+        const { data: setting } = await db.from('app_settings').select('value_text, is_active').eq('key_name', 'dashboard_banners').single();
+
+        if (!setting || !setting.is_active || !setting.value_text) {
+            slider.innerHTML = `<div class="slide-item active"><img src="https://via.placeholder.com/800x400?text=Beauty+Bloom+Fashion"></div>`;
+            return;
+        }
+
         try {
-            const { data: setting, error } = await db.from('app_settings')
-                .select('value_text, is_active')
-                .eq('key_name', 'dashboard_banners')
-                .maybeSingle();
+            const adImages = JSON.parse(setting.value_text);
+            slider.innerHTML = adImages.map((imgUrl, i) => `<div class="slide-item ${i === 0 ? 'active' : ''}"><img src="${imgUrl}"></div>`).join('');
+            dotsContainer.innerHTML = adImages.map((_, i) => `<div class="dot-ad ${i === 0 ? 'active' : ''}"></div>`).join('');
 
-            if (error) throw error;
-
-            const slider = document.getElementById('promo-slider');
-            const dots = document.getElementById('promo-dots');
-
-            if (setting?.is_active && setting?.value_text) {
-                const adImages = JSON.parse(setting.value_text);
-                slider.innerHTML = adImages.map((imgUrl, i) => `<div class="slide-item ${i === 0 ? 'active' : ''}"><img src="${imgUrl}"></div>`).join('');
-                dots.innerHTML = adImages.map((_, i) => `<div class="dot-ad ${i === 0 ? 'active' : ''}"></div>`).join('');
-                
-                if (adImages.length > 1) {
-                    setInterval(() => {
-                        const slides = document.querySelectorAll('.slide-item');
-                        const dotItems = document.querySelectorAll('.dot-ad');
-                        if (!slides.length) return;
-                        slides[currentSlide].classList.remove('active');
-                        dotItems[currentSlide].classList.remove('active');
-                        currentSlide = (currentSlide + 1) % slides.length;
-                        slides[currentSlide].classList.add('active');
-                        dotItems[currentSlide].classList.add('active');
-                    }, 5000);
-                }
+            if (adImages.length > 1) {
+                setInterval(() => {
+                    const slides = document.querySelectorAll('.slide-item');
+                    const dots = document.querySelectorAll('.dot-ad');
+                    if (slides.length === 0) return;
+                    slides[currentSlide].classList.remove('active');
+                    dots[currentSlide].classList.remove('active');
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    slides[currentSlide].classList.add('active');
+                    dots[currentSlide].classList.add('active');
+                }, 5000);
             }
-        } catch (e) { console.error("Ads Error:", e); }
+        } catch (e) { console.error(e); }
     }
 
     async function fetchProducts() {
-        try {
-            const { data, error } = await db.from('produk')
-                .select('*')
-                .gt('stok_sekarang', 0)
-                .eq('tampil_online', true)
-                .order('created_at', { ascending: false });
-            
-            if (error) throw error;
-            renderProducts(data);
-        } catch (e) { console.error("Products Error:", e); }
+        const { data, error } = await db.from('produk').select('*').gt('stok_sekarang', 0).eq('tampil_online', true).order('created_at', { ascending: false });
+        if (!error) renderProducts(data);
     }
 
     function renderProducts(list) {
         const grid = document.getElementById('productGrid');
-        if (!list.length) {
-            grid.innerHTML = `<div class="col-span-full text-center py-10 opacity-50 text-[10px]">Belum ada koleksi tersedia.</div>`;
-            return;
-        }
         grid.innerHTML = list.map(p => `
-            <div class="bg-white rounded-[32px] p-3 shadow-sm border border-pink-50 flex flex-col h-full group">
-                <div class="aspect-[4/5] bg-slate-50 rounded-[26px] mb-3 overflow-hidden">
+            <div class="product-card bg-white rounded-[32px] p-3 shadow-sm border border-pink-50 flex flex-col h-full group">
+                <div class="w-full aspect-[4/5] bg-slate-50 rounded-[26px] mb-3 overflow-hidden relative">
                     <img src="${p.image_url || 'https://via.placeholder.com/300x400'}" class="w-full h-full object-cover">
                 </div>
-                <h4 class="font-bold text-slate-700 text-[11px] uppercase mb-1 line-clamp-2 px-2">${p.nama_barang}</h4>
-                <button onclick="handleProductClick()" class="mt-auto w-full bg-slate-50 hover:bg-[#f72585] hover:text-white py-3 rounded-2xl text-[9px] font-black uppercase transition-all tracking-widest border border-pink-50">
-                    Cek Detail ✨
+                <div class="flex-grow px-2">
+                    <h4 class="font-bold text-slate-700 text-[11px] leading-tight uppercase mb-1 line-clamp-2">${p.nama_barang}</h4>
+                </div>
+                <button onclick="handleProductClick()" class="mt-4 w-full bg-slate-50 hover:bg-pink-500 hover:text-white py-3.5 rounded-2xl text-[9px] font-black uppercase transition-all tracking-widest border border-pink-50">
+                    Cek Detail Koleksi ✨
                 </button>
             </div>
         `).join('');
@@ -205,13 +223,12 @@
     async function handleProductClick() {
         const { data: { session } } = await db.auth.getSession();
         if (!session) {
-            alert("Silakan Login terlebih dahulu 🌸");
+            alert("Hai cantik! Silakan Login untuk melihat detail koleksi eksklusif kami. 🌸");
             window.location.href = "login-customer.html";
         } else {
             window.location.href = "online-shop.html"; 
         }
     }
-
 </script>
 </body>
 </html>
