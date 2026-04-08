@@ -88,73 +88,88 @@
     let currentSlide = 0;
 
     window.onload = () => {
-        // Hapus header manual karena menyebabkan "is not a function"
-        setTimeout(() => {
-            fetchProducts();
-            loadDynamicAds();
-            loadPopupAd();
-        }, 800);
+        // Gunakan pengecekan keberadaan variabel db yang lebih ketat
+        const checkDB = setInterval(() => {
+            if (typeof db !== 'undefined') {
+                clearInterval(checkDB);
+                initApp();
+            }
+        }, 100);
     };
 
-    // --- FIX POPUP: Hapus .headers() ---
+    function initApp() {
+        fetchProducts();
+        loadDynamicAds();
+        loadPopupAd();
+    }
+
+    // --- FUNGSI POPUP (DENGAN PENANGANAN ERROR 406) ---
     async function loadPopupAd() {
         try {
-            if (typeof db === 'undefined') return;
-
+            // Gunakan query langsung via fetch jika library bermasalah, 
+            // tapi kita coba dulu cara standar yang diperbaiki:
             const { data: popup, error } = await db.from('app_settings')
                 .select('value_text, is_active')
                 .eq('key_name', 'popup_banner')
-                .single();
+                .maybeSingle(); // Menggunakan maybeSingle lebih aman daripada .single()
+
+            if (error) throw error;
 
             if (popup && popup.is_active && popup.value_text) {
                 const modal = document.getElementById('popupAdModal');
-                document.getElementById('popupContent').innerHTML = `<img src="${popup.value_text}" class="w-full h-full object-cover">`;
+                const content = document.getElementById('popupContent');
+                content.innerHTML = `<img src="${popup.value_text}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='Gambar tidak ditemukan'">`;
+                
                 modal.classList.add('flex');
-                setTimeout(() => {
-                    modal.classList.add('show-modal');
-                    document.body.style.overflow = 'hidden'; 
-                }, 100);
+                setTimeout(() => modal.classList.add('show-modal'), 50);
             }
-        } catch (e) { console.error("Popup error:", e); }
+        } catch (e) { 
+            console.warn("Popup info:", e.message); 
+        }
     }
 
     function closePopup() {
         const modal = document.getElementById('popupAdModal');
         modal.classList.remove('show-modal');
-        setTimeout(() => { modal.classList.remove('flex'); document.body.style.overflow = ''; }, 400);
+        setTimeout(() => {
+            modal.classList.remove('flex');
+            document.body.style.overflow = ''; 
+        }, 300);
     }
 
-    // --- FIX SLIDER: Hapus .headers() ---
     async function loadDynamicAds() {
         try {
-            const { data: setting } = await db.from('app_settings')
+            const { data: setting, error } = await db.from('app_settings')
                 .select('value_text, is_active')
                 .eq('key_name', 'dashboard_banners')
-                .single();
+                .maybeSingle();
+
+            if (error) throw error;
+
+            const slider = document.getElementById('promo-slider');
+            const dots = document.getElementById('promo-dots');
 
             if (setting?.is_active && setting?.value_text) {
                 const adImages = JSON.parse(setting.value_text);
-                document.getElementById('promo-slider').innerHTML = adImages.map((imgUrl, i) => `<div class="slide-item ${i === 0 ? 'active' : ''}"><img src="${imgUrl}"></div>`).join('');
-                document.getElementById('promo-dots').innerHTML = adImages.map((_, i) => `<div class="dot-ad ${i === 0 ? 'active' : ''}"></div>`).join('');
-                startSlider();
+                slider.innerHTML = adImages.map((imgUrl, i) => `<div class="slide-item ${i === 0 ? 'active' : ''}"><img src="${imgUrl}"></div>`).join('');
+                dots.innerHTML = adImages.map((_, i) => `<div class="dot-ad ${i === 0 ? 'active' : ''}"></div>`).join('');
+                
+                if (adImages.length > 1) {
+                    setInterval(() => {
+                        const slides = document.querySelectorAll('.slide-item');
+                        const dotItems = document.querySelectorAll('.dot-ad');
+                        if (!slides.length) return;
+                        slides[currentSlide].classList.remove('active');
+                        dotItems[currentSlide].classList.remove('active');
+                        currentSlide = (currentSlide + 1) % slides.length;
+                        slides[currentSlide].classList.add('active');
+                        dotItems[currentSlide].classList.add('active');
+                    }, 5000);
+                }
             }
-        } catch (e) { console.error(e); }
+        } catch (e) { console.error("Ads Error:", e); }
     }
 
-    function startSlider() {
-        setInterval(() => {
-            const slides = document.querySelectorAll('.slide-item');
-            const dots = document.querySelectorAll('.dot-ad');
-            if (slides.length <= 1) return;
-            slides[currentSlide].classList.remove('active');
-            dots[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
-            dots[currentSlide].classList.add('active');
-        }, 5000);
-    }
-
-    // --- FIX PRODUCTS: Hapus .headers() ---
     async function fetchProducts() {
         try {
             const { data, error } = await db.from('produk')
@@ -163,12 +178,18 @@
                 .eq('tampil_online', true)
                 .order('created_at', { ascending: false });
             
-            if (!error) renderProducts(data);
-        } catch (e) { console.error(e); }
+            if (error) throw error;
+            renderProducts(data);
+        } catch (e) { console.error("Products Error:", e); }
     }
 
     function renderProducts(list) {
-        document.getElementById('productGrid').innerHTML = list.map(p => `
+        const grid = document.getElementById('productGrid');
+        if (!list.length) {
+            grid.innerHTML = `<div class="col-span-full text-center py-10 opacity-50 text-[10px]">Belum ada koleksi tersedia.</div>`;
+            return;
+        }
+        grid.innerHTML = list.map(p => `
             <div class="bg-white rounded-[32px] p-3 shadow-sm border border-pink-50 flex flex-col h-full group">
                 <div class="aspect-[4/5] bg-slate-50 rounded-[26px] mb-3 overflow-hidden">
                     <img src="${p.image_url || 'https://via.placeholder.com/300x400'}" class="w-full h-full object-cover">
@@ -190,6 +211,7 @@
             window.location.href = "online-shop.html"; 
         }
     }
+
 </script>
 </body>
 </html>
