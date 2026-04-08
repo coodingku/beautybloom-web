@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
     <title>Beauty Bloom Fashion | Koleksi Import Premium & Terkini 🌸</title>
+    <meta name="description" content="Destinasi utama koleksi fashion impor eksklusif. Beauty Bloom Fashion menghadirkan tren global dengan kualitas premium dan gaya timeless.">
+    <meta name="author" content="Finex POS System">
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-online.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,35 +18,43 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fff0f3; margin: 0; scroll-behavior: smooth; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(247, 37, 133, 0.1); }
+        
+        /* Slider Setup */
         .slider-container { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 35px; }
         .slide-item { position: absolute; inset: 0; opacity: 0; transition: opacity 0.8s ease-in-out; display: none; }
         .slide-item.active { opacity: 1; display: block; }
         .slide-item img { width: 100%; height: 100%; object-fit: cover; }
+        
         .dot-ad { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); transition: all 0.3s; }
         .dot-ad.active { background: white; width: 20px; border-radius: 10px; }
+
         .product-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .product-card:hover { transform: translateY(-8px); }
+        .product-card:hover { transform: translateY(-8px); shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        
         footer { background: #fff; border-top-left-radius: 40px; border-top-right-radius: 40px; }
 
-        /* MODAL ANIMATION */
-        #popupAdModal { transition: all 0.4s ease-in-out; }
-        .modal-content-scale { transform: scale(0.9); transition: all 0.3s ease-out; }
-        .show-modal .modal-content-scale { transform: scale(1); }
+        /* MODAL POPUP ANIMATION */
+        #popupAdModal { transition: opacity 0.4s ease-out; }
+        .modal-box { transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .show-modal .modal-box { transform: scale(1); }
     </style>
 </head>
 <body class="relative">
 
     <div id="popupAdModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePopup()"></div>
-        <div class="modal-content-scale relative bg-white rounded-[40px] overflow-hidden max-w-sm w-full shadow-2xl">
+        
+        <div class="modal-box relative bg-white rounded-[40px] overflow-hidden max-w-sm w-full shadow-2xl">
             <button onclick="closePopup()" class="absolute top-4 right-4 w-10 h-10 bg-black/20 hover:bg-black/40 text-white rounded-full flex items-center justify-center backdrop-blur-md z-10">
                 <i class="fas fa-times"></i>
             </button>
+            
             <div id="popupContent">
                 </div>
+            
             <div class="p-6 text-center">
-                <button onclick="closePopup()" class="w-full bg-[#f72585] text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-pink-200">
-                    Lihat Sekarang ✨
+                <button onclick="closePopup()" class="w-full bg-[#f72585] text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-lg shadow-pink-200">
+                    Dapatkan Sekarang 🌸
                 </button>
             </div>
         </div>
@@ -92,6 +104,7 @@
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Imported Fashion Curator</p>
             </div>
         </div>
+
         <div id="productGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-20">
             <div class="col-span-full text-center py-20 text-slate-400 text-[10px] font-black animate-pulse uppercase tracking-widest">
                 Menyiapkan Koleksi Terbaik... ✨
@@ -99,10 +112,14 @@
         </div>
     </section>
 
-    <footer class="p-8 pt-12 text-slate-600 bg-white rounded-t-[40px]">
-        <div class="text-center pb-4">
-            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">© 2026 BeautyBloom. All Rights Reserved.</p>
+    <footer class="p-8 pt-12 shadow-[0_-10px_40px_rgba(247,37,133,0.05)] text-slate-600 bg-white rounded-t-[40px]">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 text-center md:text-left">
+            <div>
+                <h2 class="text-2xl font-black text-[#f72585] mb-2 tracking-tighter uppercase">BeautyBloom</h2>
+                <p class="text-[10px] font-bold text-pink-400 uppercase tracking-[0.2em] mb-4 italic">The Art of Fashion</p>
+            </div>
         </div>
+        <p class="text-center text-[9px] font-bold text-slate-400 mt-10 uppercase tracking-tighter">© 2026 BeautyBloom. All Rights Reserved.</p>
     </footer>
 
 <script>
@@ -111,11 +128,14 @@
     window.onload = () => {
         fetchProducts();
         loadDynamicAds();
-        loadPopupAd(); // Panggil fungsi popup saat load
+        loadPopupAd(); // Inisialisasi Pop-up
     };
 
-    // FUNGSI POPUP DARI ADMIN
+    // FUNGSI POP-UP DARI ADMIN
     async function loadPopupAd() {
+        // Cek apakah sudah tampil di sesi ini (agar tidak mengganggu user terus menerus)
+        if (sessionStorage.getItem('popupShown')) return;
+
         const { data: popup } = await db.from('app_settings')
             .select('value_text, is_active')
             .eq('key_name', 'popup_banner')
@@ -127,12 +147,12 @@
             
             content.innerHTML = `<img src="${popup.value_text}" class="w-full aspect-square object-cover">`;
             
-            // Munculkan dengan sedikit delay agar estetik
+            // Munculkan dengan sedikit delay agar lebih halus
             setTimeout(() => {
                 modal.classList.remove('hidden');
-                document.body.classList.add('overflow-hidden'); // Kunci scroll
-                setTimeout(() => modal.classList.add('show-modal'), 10);
-            }, 1500);
+                document.body.style.overflow = 'hidden'; // Kunci scroll
+                setTimeout(() => modal.classList.add('show-modal'), 50);
+            }, 1200);
         }
     }
 
@@ -141,26 +161,26 @@
         modal.classList.remove('show-modal');
         setTimeout(() => {
             modal.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-        }, 3000); // Sesuaikan dengan durasi transisi
-        
-        // Simpan ke session agar tidak muncul terus menerus di sesi yang sama (opsional)
-        sessionStorage.setItem('popup_shown', 'true');
+            document.body.style.overflow = ''; // Aktifkan kembali scroll
+            sessionStorage.setItem('popupShown', 'true'); // Tandai sudah tampil
+        }, 300);
     }
 
-    // ... (Sisa fungsi fetchProducts dan loadDynamicAds tetap sama) ...
     async function loadDynamicAds() {
         const slider = document.getElementById('promo-slider');
         const dotsContainer = document.getElementById('promo-dots');
         const { data: setting } = await db.from('app_settings').select('value_text, is_active').eq('key_name', 'dashboard_banners').single();
+
         if (!setting || !setting.is_active || !setting.value_text) {
             slider.innerHTML = `<div class="slide-item active"><img src="https://via.placeholder.com/800x400?text=Beauty+Bloom+Fashion"></div>`;
             return;
         }
+
         try {
             const adImages = JSON.parse(setting.value_text);
             slider.innerHTML = adImages.map((imgUrl, i) => `<div class="slide-item ${i === 0 ? 'active' : ''}"><img src="${imgUrl}"></div>`).join('');
             dotsContainer.innerHTML = adImages.map((_, i) => `<div class="dot-ad ${i === 0 ? 'active' : ''}"></div>`).join('');
+
             if (adImages.length > 1) {
                 setInterval(() => {
                     const slides = document.querySelectorAll('.slide-item');
