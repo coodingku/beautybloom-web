@@ -33,25 +33,26 @@
         
         footer { background: #fff; border-top-left-radius: 40px; border-top-right-radius: 40px; }
 
-        /* --- STYLE TAMBAHAN UNTUK POP-UP --- */
-        #popupAdModal { transition: opacity 0.4s ease-out; }
+        /* --- STYLE UNTUK POP-UP IKLAN --- */
+        #popupAdModal { opacity: 0; transition: opacity 0.4s ease-out; pointer-events: none; }
+        #popupAdModal.show-modal { opacity: 1; pointer-events: auto; }
         .modal-box { transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .show-modal .modal-box { transform: scale(1); }
     </style>
 </head>
 <body class="relative">
 
-    <div id="popupAdModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6">
+    <div id="popupAdModal" class="hidden fixed inset-0 z-[1000] flex items-center justify-center p-6">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePopup()"></div>
         <div class="modal-box relative bg-white rounded-[40px] overflow-hidden max-w-sm w-full shadow-2xl">
             <button onclick="closePopup()" class="absolute top-4 right-4 w-10 h-10 bg-black/20 hover:bg-black/40 text-white rounded-full flex items-center justify-center backdrop-blur-md z-10">
                 <i class="fas fa-times"></i>
             </button>
-            <div id="popupContent">
+            <div id="popupContent" class="bg-slate-100 aspect-square overflow-hidden flex items-center justify-center">
                 </div>
             <div class="p-6 text-center">
                 <button onclick="closePopup()" class="w-full bg-[#f72585] text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-lg shadow-pink-200">
-                    Lihat Koleksi 🌸
+                    Lihat Koleksi Sekarang 🌸
                 </button>
             </div>
         </div>
@@ -101,82 +102,28 @@
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Imported Fashion Curator</p>
             </div>
         </div>
-
         <div id="productGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-20">
-            <div class="col-span-full text-center py-20 text-slate-400 text-[10px] font-black animate-pulse uppercase tracking-widest">
-                Menyiapkan Koleksi Terbaik... ✨
             </div>
-        </div>
     </section>
 
     <footer class="p-8 pt-12 shadow-[0_-10px_40px_rgba(247,37,133,0.05)] text-slate-600 bg-white rounded-t-[40px]">
         <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
-            
             <div>
                 <h2 class="text-2xl font-black text-[#f72585] mb-2 tracking-tighter uppercase">BeautyBloom</h2>
-                <p class="text-[10px] font-bold text-pink-400 uppercase tracking-[0.2em] mb-4 italic">The Art of Fashion</p>
-                <div class="space-y-4">
-                    <p class="text-xs leading-relaxed font-medium text-slate-500 italic">
-                        "Beauty Bloom Fashion adalah destinasi utama bagi Anda yang mengutamakan kualitas dan eksklusivitas. Kami menghadirkan koleksi fashion impor pilihan yang memadukan tren global dengan sentuhan gaya yang timeless."
-                    </p>
-                    <div class="flex items-center gap-3 py-2">
-                        <div class="flex items-center gap-1.5">
-                            <i class="fas fa-check-circle text-[#f72585] text-[10px]"></i>
-                            <span class="text-[9px] text-slate-700 font-black uppercase tracking-tighter">Authentic</span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <i class="fas fa-check-circle text-[#f72585] text-[10px]"></i>
-                            <span class="text-[9px] text-slate-700 font-black uppercase tracking-tighter">Premium</span>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="flex gap-4 mt-6">
-                    <a href="https://instagram.com/dbeautybloom_" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-pink-500 hover:bg-[#f72585] hover:text-white transition-all shadow-sm">
-                        <i class="fab fa-instagram text-lg"></i>
-                    </a>
-                    <a href="https://tiktok.com/@beautybloom_9" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-800 hover:bg-black hover:text-white transition-all shadow-sm">
-                        <i class="fab fa-tiktok text-lg"></i>
-                    </a>
+                    <a href="https://instagram.com/dbeautybloom_" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-pink-500 hover:bg-[#f72585] transition-all"><i class="fab fa-instagram"></i></a>
+                    <a href="https://tiktok.com/@beautybloom_9" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-800 hover:bg-black hover:text-white transition-all"><i class="fab fa-tiktok"></i></a>
                 </div>
             </div>
-
             <div>
                 <h3 class="font-black text-slate-800 text-sm uppercase tracking-widest mb-6 border-b-2 border-pink-100 pb-2 w-fit">Customer Care</h3>
-                <ul class="space-y-4">
-                    <li>
-                        <a href="https://wa.me/6281805060499" class="flex items-center gap-3 group">
-                            <div class="w-9 h-9 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-lg group-hover:bg-green-500 group-hover:text-white transition-all">
-                                <i class="fab fa-whatsapp"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">WhatsApp Chat</p>
-                                <p class="text-sm font-black text-slate-700">0818-0506-0499</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <div class="w-9 h-9 bg-pink-100 text-[#f72585] rounded-xl flex items-center justify-center text-lg"><i class="fas fa-envelope"></i></div>
-                        <div>
-                            <p class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">Email Support</p>
-                            <p class="text-sm font-black text-slate-700">beautybloom64@gmail.com</p>
-                        </div>
-                    </li>
-                </ul>
+                <p class="text-sm font-black text-slate-700">0818-0506-0499</p>
+                <p class="text-xs text-slate-500">beautybloom64@gmail.com</p>
             </div>
-
-            <div class="bg-slate-50 p-6 rounded-[25px] border border-slate-100 flex flex-col justify-between">
-                <div>
-                    <h3 class="font-black text-slate-800 text-xs uppercase tracking-widest mb-4">Informasi Sistem</h3>
-                    <div class="flex items-center gap-4">
-                        <div class="p-3 bg-white rounded-xl shadow-sm"><i class="fas fa-laptop-code text-[#f72585]"></i></div>
-                        <div>
-                            <p class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">Developed By</p>
-                            <p class="text-xs font-black text-slate-800">Finex POS System</p>
-                        </div>
-                    </div>
-                </div>
-                <p class="text-[9px] font-bold text-slate-400 mt-6 uppercase tracking-tighter">© 2026 BeautyBloom. All Rights Reserved.</p>
+            <div class="bg-slate-50 p-6 rounded-[25px] border border-slate-100">
+                <p class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">Developed By</p>
+                <p class="text-xs font-black text-slate-800">Finex POS System</p>
+                <p class="text-[9px] font-bold text-slate-400 mt-6 uppercase">© 2026 BeautyBloom.</p>
             </div>
         </div>
     </footer>
@@ -184,31 +131,40 @@
 <script>
     let currentSlide = 0;
 
-    window.onload = () => {
+    window.onload = async () => {
+        // Jalankan semua fungsi tanpa menghapus yang lama
         fetchProducts();
         loadDynamicAds();
-        loadPopupAd(); // Panggil fungsi pop-up saat web diakses/refresh
+        
+        // Jeda 1 detik agar koneksi Supabase di supabase-online.js stabil
+        setTimeout(() => {
+            loadPopupAd();
+        }, 1000);
     };
 
-    // --- FUNGSI BARU: LOAD POP-UP DARI DATABASE ---
+    // --- FUNGSI POP-UP IKLAN ---
     async function loadPopupAd() {
-        const { data: popup } = await db.from('app_settings')
-            .select('value_text, is_active')
-            .eq('key_name', 'popup_banner')
-            .single();
+        try {
+            if (typeof db === 'undefined') return;
 
-        if (popup && popup.is_active && popup.value_text) {
-            const modal = document.getElementById('popupAdModal');
-            const content = document.getElementById('popupContent');
-            
-            content.innerHTML = `<img src="${popup.value_text}" class="w-full aspect-square object-cover">`;
-            
-            // Berikan jeda 1.5 detik setelah web terbuka agar pop-up muncul elegan
-            setTimeout(() => {
+            const { data: popup, error } = await db.from('app_settings')
+                .select('value_text, is_active')
+                .eq('key_name', 'popup_banner')
+                .single();
+
+            if (popup && popup.is_active && popup.value_text) {
+                const modal = document.getElementById('popupAdModal');
+                const content = document.getElementById('popupContent');
+                
+                content.innerHTML = `<img src="${popup.value_text}" class="w-full h-full object-cover">`;
+                
+                // Munculkan modal
                 modal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; // Kunci scroll agar fokus ke iklan
+                document.body.style.overflow = 'hidden'; 
                 setTimeout(() => modal.classList.add('show-modal'), 50);
-            }, 1500);
+            }
+        } catch (err) {
+            console.error("Popup gagal dimuat:", err);
         }
     }
 
@@ -217,21 +173,20 @@
         modal.classList.remove('show-modal');
         setTimeout(() => {
             modal.classList.add('hidden');
-            document.body.style.overflow = ''; // Aktifkan kembali scroll
+            document.body.style.overflow = ''; 
         }, 300);
     }
 
+    // --- FUNGSI SLIDER (LAMA) ---
     async function loadDynamicAds() {
         const slider = document.getElementById('promo-slider');
         const dotsContainer = document.getElementById('promo-dots');
-        const { data: setting } = await db.from('app_settings').select('value_text, is_active').eq('key_name', 'dashboard_banners').single();
-
-        if (!setting || !setting.is_active || !setting.value_text) {
-            slider.innerHTML = `<div class="slide-item active"><img src="https://via.placeholder.com/800x400?text=Beauty+Bloom+Fashion"></div>`;
-            return;
-        }
-
         try {
+            const { data: setting } = await db.from('app_settings').select('value_text, is_active').eq('key_name', 'dashboard_banners').single();
+            if (!setting || !setting.is_active || !setting.value_text) {
+                slider.innerHTML = `<div class="slide-item active"><img src="https://via.placeholder.com/800x400?text=Beauty+Bloom"></div>`;
+                return;
+            }
             const adImages = JSON.parse(setting.value_text);
             slider.innerHTML = adImages.map((imgUrl, i) => `<div class="slide-item ${i === 0 ? 'active' : ''}"><img src="${imgUrl}"></div>`).join('');
             dotsContainer.innerHTML = adImages.map((_, i) => `<div class="dot-ad ${i === 0 ? 'active' : ''}"></div>`).join('');
@@ -251,6 +206,7 @@
         } catch (e) { console.error(e); }
     }
 
+    // --- FUNGSI PRODUK (LAMA) ---
     async function fetchProducts() {
         const { data, error } = await db.from('produk').select('*').gt('stok_sekarang', 0).eq('tampil_online', true).order('created_at', { ascending: false });
         if (!error) renderProducts(data);
@@ -260,14 +216,14 @@
         const grid = document.getElementById('productGrid');
         grid.innerHTML = list.map(p => `
             <div class="product-card bg-white rounded-[32px] p-3 shadow-sm border border-pink-50 flex flex-col h-full group">
-                <div class="w-full aspect-[4/5] bg-slate-50 rounded-[26px] mb-3 overflow-hidden relative">
+                <div class="w-full aspect-[4/5] bg-slate-50 rounded-[26px] mb-3 overflow-hidden">
                     <img src="${p.image_url || 'https://via.placeholder.com/300x400'}" class="w-full h-full object-cover">
                 </div>
                 <div class="flex-grow px-2">
                     <h4 class="font-bold text-slate-700 text-[11px] leading-tight uppercase mb-1 line-clamp-2">${p.nama_barang}</h4>
                 </div>
-                <button onclick="handleProductClick()" class="mt-4 w-full bg-slate-50 hover:bg-pink-500 hover:text-white py-3.5 rounded-2xl text-[9px] font-black uppercase transition-all tracking-widest border border-pink-50">
-                    Cek Detail Koleksi ✨
+                <button onclick="handleProductClick()" class="mt-4 w-full bg-slate-50 hover:bg-pink-500 hover:text-white py-3.5 rounded-2xl text-[9px] font-black uppercase transition-all border border-pink-50">
+                    Detail ✨
                 </button>
             </div>
         `).join('');
@@ -276,7 +232,7 @@
     async function handleProductClick() {
         const { data: { session } } = await db.auth.getSession();
         if (!session) {
-            alert("Hai cantik! Silakan Login untuk melihat detail koleksi eksklusif kami. 🌸");
+            alert("Silakan Login terlebih dahulu 🌸");
             window.location.href = "login-customer.html";
         } else {
             window.location.href = "online-shop.html"; 
